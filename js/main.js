@@ -5,6 +5,7 @@ function main() {
     const equalBtn = document.querySelector(".equal");
     const clearBtn = document.querySelector(".clear");
     const deleteBtn = document.querySelector(".delete");
+    const dotBtn = document.querySelector(".dot");
 
     let displayed = '';
     let firstNum = 0;
@@ -23,26 +24,39 @@ function main() {
         }
         displayed = '';
         currentSign = operationBtn.textContent;
+        dotBtn.disabled = false;
     }))
 
     equalBtn.addEventListener("click", () => {
-        secondNum = displayed;
-        console.log(typeof(firstNum));
-        if (total != 0) {
-            firstNum = total;
+        if (currentSign == '') {
+            alert("No operator entered");
+            displayed = '';
+            firstNum = 0;
+            secondNum = 0;
+            currentSign = '';
             total = 0;
+            screenNum.textContent = displayed;
+            dotBtn.disabled = false;
         }
-        let res = operate(+firstNum, +secondNum, currentSign);
-        total += res;
-        firstNum = 0;
-        if (total % 1 != 0) {
-            screenNum.textContent = total.toFixed(2);
-            secondNum = 0;
-        } else {
-            screenNum.textContent = total;
-            secondNum = 0;
+        else {
+            secondNum = displayed;
+            console.log(typeof(firstNum));
+            if (total != 0) {
+                firstNum = total;
+                total = 0;
+            }
+            let res = operate(+firstNum, +secondNum, currentSign);
+            total += res;
+            firstNum = 0;
+            if (total % 1 != 0) {
+                screenNum.textContent = total.toFixed(2);
+                secondNum = 0;
+            } else {
+                screenNum.textContent = total;
+                secondNum = 0;
+            }
+            dotBtn.disabled = false;
         }
-        console.log(total);
     })
 
     clearBtn.addEventListener("click", () => {
@@ -52,11 +66,16 @@ function main() {
         currentSign = '';
         total = 0;
         screenNum.textContent = displayed;
+        dotBtn.disabled = false;
     })
 
     deleteBtn.addEventListener("click", () => {
         displayed = displayed.slice(0, -1);
         screenNum.textContent = displayed;
+    })
+
+    dotBtn.addEventListener("click", () => {
+        dotBtn.disabled = true;
     })
 
 
