@@ -10,6 +10,7 @@ function main() {
     let firstNum = 0;
     let secondNum = 0;
     let currentSign = '';
+    let total = 0;
 
     numBtns.forEach(numBtn => numBtn.addEventListener("click", () => {
         displayed += numBtn.textContent;
@@ -17,7 +18,9 @@ function main() {
     }))
 
     operationBtns.forEach(operationBtn => operationBtn.addEventListener("click", () => {
-        firstNum = displayed;
+        if (total === 0) {
+            firstNum = displayed;
+        }
         displayed = '';
         currentSign = operationBtn.textContent;
     }))
@@ -25,12 +28,21 @@ function main() {
     equalBtn.addEventListener("click", () => {
         secondNum = displayed;
         console.log(typeof(firstNum));
-        let res = operate(+firstNum, +secondNum, currentSign);
-        if (res % 1 != 0) {
-            screenNum.textContent = res.toFixed(2);
-        } else {
-            screenNum.textContent = res;
+        if (total != 0) {
+            firstNum = total;
+            total = 0;
         }
+        let res = operate(+firstNum, +secondNum, currentSign);
+        total += res;
+        firstNum = 0;
+        if (total % 1 != 0) {
+            screenNum.textContent = total.toFixed(2);
+            secondNum = 0;
+        } else {
+            screenNum.textContent = total;
+            secondNum = 0;
+        }
+        console.log(total);
     })
 
     clearBtn.addEventListener("click", () => {
@@ -38,6 +50,7 @@ function main() {
         firstNum = 0;
         secondNum = 0;
         currentSign = '';
+        total = 0;
         screenNum.textContent = displayed;
     })
 
@@ -61,6 +74,16 @@ function main() {
                 res = num1 * num2;
                 break;
             case "/":
+                if (num2 == 0) {
+                    alert("Error, can't divide by 0");
+                    displayed = '';
+                    firstNum = 0;
+                    secondNum = 0;
+                    currentSign = '';
+                    total = 0;
+                    screenNum.textContent = displayed;
+                    break;
+                }
                 res = num1 / num2;
                 break;
         }
